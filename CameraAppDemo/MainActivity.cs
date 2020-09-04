@@ -2,7 +2,6 @@ namespace CameraAppDemo
 {
     using System;
     using System.Collections.Generic;
-
     using Android.App;
     using Android.Content;
     using Android.Content.PM;
@@ -11,9 +10,7 @@ namespace CameraAppDemo
     using Android.OS;
     using Android.Provider;
     using Android.Widget;
-
     using Java.IO;
-
     using Environment = Android.OS.Environment;
     using Uri = Android.Net.Uri;
 
@@ -24,24 +21,29 @@ namespace CameraAppDemo
         private File _file;
         private ImageView _imageView;
 
+      
+        
+        
+        
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
 
             // make it available in the gallery
-            Intent mediaScanIntent = new Intent(Intent.ActionMediaScannerScanFile);
-            Uri contentUri = Uri.FromFile(_file);
+            var mediaScanIntent = new Intent(Intent.ActionMediaScannerScanFile);
+            var contentUri = Uri.FromFile(_file);
             mediaScanIntent.SetData(contentUri);
             SendBroadcast(mediaScanIntent);
 
             // display in ImageView. We will resize the bitmap to fit the display
             // Loading the full sized image will consume to much memory 
             // and cause the application to crash.
-            int height = _imageView.Height;
-            int width = Resources.DisplayMetrics.WidthPixels;
+            var height = _imageView.Height;
+            var width = Resources.DisplayMetrics.WidthPixels;
+            
             using (Bitmap bitmap = _file.Path.LoadAndResizeBitmap(width, height))
             {
-                _imageView.RecycleBitmap ();
+                _imageView.RecycleBitmap();
                 _imageView.SetImageBitmap(bitmap);
             }
         }
@@ -74,7 +76,7 @@ namespace CameraAppDemo
         private bool IsThereAnAppToTakePictures()
         {
             Intent intent = new Intent(MediaStore.ActionImageCapture);
-            IList<ResolveInfo> availableActivities = PackageManager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+            var availableActivities = PackageManager?.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
             return availableActivities != null && availableActivities.Count > 0;
         }
 
